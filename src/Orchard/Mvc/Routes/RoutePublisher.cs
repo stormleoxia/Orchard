@@ -63,7 +63,8 @@ namespace Orchard.Mvc.Routes {
 
                 // HACK: For inserting names in internal dictionary when inserting route to RouteCollection.
                 var routeCollectionType = typeof (RouteCollection);
-                var namedMap = (Dictionary<string, RouteBase>) routeCollectionType.GetField("_namedMap", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(_routeCollection);
+				var fieldInfo = routeCollectionType.GetField ("_namedMap", BindingFlags.Instance | BindingFlags.NonPublic);
+				var namedMap = (Dictionary<string, RouteBase>) fieldInfo.GetValue(_routeCollection);
 
             // new routes are added
                 foreach (var routeDescriptor in routesArray) {

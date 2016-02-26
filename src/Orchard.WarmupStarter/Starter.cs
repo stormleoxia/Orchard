@@ -8,6 +8,7 @@ namespace Orchard.WarmupStarter {
         private readonly Action<HttpApplication, T> _beginRequest;
         private readonly Action<HttpApplication, T> _endRequest;
         private readonly object _synLock = new object();
+		private readonly ManualResetEvent mre = new ManualResetEvent(false);
         /// <summary>
         /// The result of the initialization queued work item.
         /// Set only when initialization has completed without errors.
@@ -37,6 +38,17 @@ namespace Orchard.WarmupStarter {
             }
 
         public void OnBeginRequest(HttpApplication application) {
+			// FB: We could be here but initialization is still not done. 
+			if (!mre.WaitOne(1000, true))
+			{
+				lock (_synLock)
+				{
+					if (_error == null)
+					{
+						throw new InvalidOperationException("Initialization was not done after 1 seconds.");
+					}
+				}
+			}
             // Initialization resulted in an error
             if (_error != null) {
                 // Save error for next requests and restart async initialization.
@@ -45,13 +57,15 @@ namespace Orchard.WarmupStarter {
                 //       e.g. App_Data is made read-write for the AppPool.
                 bool restartInitialization = false;
 
-                lock (_synLock) {
-                    if (_error != null) {
-                        _previousError = _error;
-                        _error = null;
-                        restartInitialization = true;
-                    }
-        }
+                lock (_synLock)
+				{
+					if (_error != null)
+					{
+						_previousError = _error;
+						_error = null;
+						restartInitialization = true;
+					}
+				}
 
                 if (restartInitialization) {
                     LaunchStartupThread(application);
@@ -88,6 +102,7 @@ namespace Orchard.WarmupStarter {
                     try {
                         var result = _initialization(application);
                         _initializationResult = result;
+						mre.Set();
                     }
                     catch (Exception e) {
                         lock (_synLock) {

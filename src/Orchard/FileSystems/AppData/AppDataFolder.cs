@@ -25,6 +25,9 @@ namespace Orchard.FileSystems.AppData {
 
         public string RootFolder {
             get {
+				if (_root.RootFolder == null) {
+					return Directory.GetCurrentDirectory(); // TODO: Fix hack
+				}
                 return _root.RootFolder;
             }
         }

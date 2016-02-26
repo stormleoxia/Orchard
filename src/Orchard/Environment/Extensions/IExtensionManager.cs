@@ -14,8 +14,14 @@ namespace Orchard.Environment.Extensions {
     }
 
     public static class ExtensionManagerExtensions {
-        public static IEnumerable<FeatureDescriptor> EnabledFeatures(this IExtensionManager extensionManager, ShellDescriptor descriptor) {
-            return extensionManager.AvailableFeatures().Where(fd => descriptor.Features.Any(sf => sf.Name == fd.Id));
+		public static IEnumerable<FeatureDescriptor> EnabledFeatures(this IExtensionManager extensionManager, ShellDescriptor descriptor)
+		{
+			var availableFeatures = extensionManager.AvailableFeatures().ToList();
+			return availableFeatures.Where(fd =>
+			{
+				var result = descriptor.Features.Any(sf => sf.Name == fd.Id);
+				return result;
+			});
         }
     }
 }
