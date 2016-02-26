@@ -69,11 +69,11 @@
     <Content Include="Content\Admin\images\offline.gif" />
     <Content Include="Content\Admin\images\online.gif" />
     <Content Include="Styles\orchard-warmup-admin.css" />
-    <Content Include="web.config" />
     <Content Include="Scripts\Web.config" />
     <Content Include="Styles\Web.config" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Module.txt" />
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Orchard\Orchard.Framework.csproj">
