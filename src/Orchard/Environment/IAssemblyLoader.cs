@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Orchard.Logging;
@@ -71,7 +72,11 @@ namespace Orchard.Environment {
             return ExtractAssemblyShortName(fullName);
         }
 
-        public static string ExtractAssemblyShortName(string fullName) {
+        public static string ExtractAssemblyShortName(string fullName) {			
+			if (fullName.Contains ('\\') || fullName.Contains ('/')) {
+				var fileName = Path.GetFileName (fullName.Replace('\\', Path.DirectorySeparatorChar));
+				return fileName;
+			}
             int index = fullName.IndexOf(',');
             if (index < 0)
                 return fullName;

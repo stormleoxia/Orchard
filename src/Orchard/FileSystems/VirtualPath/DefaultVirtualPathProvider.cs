@@ -15,7 +15,7 @@ namespace Orchard.FileSystems.VirtualPath {
         public ILogger Logger { get; set; }
 
         public virtual string GetDirectoryName(string virtualPath) {
-            return Path.GetDirectoryName(virtualPath).Replace(Path.DirectorySeparatorChar, '/');
+            return Path.GetDirectoryName(virtualPath).Replace('\\', '/');
         }
 
         public virtual IEnumerable<string> ListFiles(string path) {
@@ -37,7 +37,7 @@ namespace Orchard.FileSystems.VirtualPath {
         }
 
         public virtual string Combine(params string[] paths) {
-            return Path.Combine(paths).Replace(Path.DirectorySeparatorChar, '/');
+            return Path.Combine(paths).Replace('\\', '/');
         }
 
         public virtual string ToAppRelative(string virtualPath) {
@@ -104,15 +104,15 @@ namespace Orchard.FileSystems.VirtualPath {
         }
 
         public virtual Stream OpenFile(string virtualPath) {
-            return HostingEnvironment.VirtualPathProvider.GetFile(virtualPath).Open();
+			return HostingEnvironment.VirtualPathProvider.GetFile(Convert(virtualPath)).Open();
         }
 
         public virtual StreamWriter CreateText(string virtualPath) {
-            return File.CreateText(MapPath(virtualPath));
+			return File.CreateText(MapPath(Convert(virtualPath)));
         }
 
         public virtual Stream CreateFile(string virtualPath) {
-            return File.Create(MapPath(virtualPath));
+			return File.Create(MapPath(Convert(virtualPath)));
         }
 
         public virtual DateTime GetFileLastWriteTimeUtc(string virtualPath) {
@@ -130,24 +130,29 @@ namespace Orchard.FileSystems.VirtualPath {
         }
 
         public string GetFileHash(string virtualPath) {
-            return GetFileHash(virtualPath, new[] { virtualPath });
+			return GetFileHash(virtualPath, new[] { Convert(virtualPath) });
         }
 
         public string GetFileHash(string virtualPath, IEnumerable<string> dependencies) {
-            return HostingEnvironment.VirtualPathProvider.GetFileHash(virtualPath, dependencies);
+			return HostingEnvironment.VirtualPathProvider.GetFileHash(Convert(virtualPath), dependencies);
         }
 
         public virtual void DeleteFile(string virtualPath) {
-            File.Delete(MapPath(virtualPath));
+			File.Delete(MapPath(Convert(virtualPath)));
         }
 
         public virtual string MapPath(string virtualPath) {
-            return HostingEnvironment.MapPath(virtualPath);
+			return HostingEnvironment.MapPath(Convert(virtualPath));
         }
 
         public virtual bool FileExists(string virtualPath) {
-            return HostingEnvironment.VirtualPathProvider.FileExists(virtualPath);
+			return HostingEnvironment.VirtualPathProvider.FileExists(Convert(virtualPath));
         }
+
+		private string Convert(string virtualPath)
+		{
+			return virtualPath.Replace ('\\', Path.DirectorySeparatorChar);
+		}
 
         public virtual bool TryFileExists(string virtualPath) {
             if (IsMalformedVirtualPath(virtualPath))

@@ -100,7 +100,7 @@ namespace Orchard.Packaging.Services {
                     }
                     else {
                         // just uninstall the new package
-                        Uninstall(package.Id, _virtualPathProvider.MapPath("~\\"));
+						Uninstall(package.Id, _virtualPathProvider.MapPath("~"+Path.DirectorySeparatorChar));
                     }
 
                     Logger.Error(String.Format("The package is compatible with version {0} and above. Please update Orchard or install another version of this package.", descriptor.OrchardVersion));

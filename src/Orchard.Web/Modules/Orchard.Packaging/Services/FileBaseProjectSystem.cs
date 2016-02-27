@@ -191,8 +191,8 @@ namespace Orchard.Packaging.Services {
         }
 
         private static string EnsureTrailingSlash(string path) {
-            if (!path.EndsWith("\\", StringComparison.Ordinal)) {
-                path += "\\";
+			if (!path.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal)) {
+				path += Path.DirectorySeparatorChar;
             }
             return path;
         }

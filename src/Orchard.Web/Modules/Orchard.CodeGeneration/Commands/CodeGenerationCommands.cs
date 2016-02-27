@@ -381,7 +381,7 @@ namespace Orchard.CodeGeneration.Commands {
             if (projectGuid != null) {
                 var itemGroup = CreateProjectItemGroup(themePath, createdFiles, createdFolders);
                 string projectText = CreateCsProject(themeName, projectGuid, itemGroup);
-                File.WriteAllText(themePath + "\\" + themeName + ".csproj", projectText);
+				File.WriteAllText(themePath + Path.DirectorySeparatorChar + themeName + ".csproj", projectText);
             }
 
             if (includeInSolution) {
