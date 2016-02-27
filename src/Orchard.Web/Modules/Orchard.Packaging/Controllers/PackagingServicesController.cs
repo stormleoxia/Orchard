@@ -32,7 +32,6 @@ namespace Orchard.Packaging.Controllers {
         private readonly IPackageManager _packageManager;
         private readonly IPackagingSourceManager _packagingSourceManager;
         private readonly IAppDataFolderRoot _appDataFolderRoot;
-        private readonly IModuleService _moduleService;
         private readonly IRecipeHarvester _recipeHarvester;
         private readonly IRecipeManager _recipeManager;
 
@@ -59,7 +58,6 @@ namespace Orchard.Packaging.Controllers {
             _shellSettings = shellSettings;
             _packageManager = packageManager;
             _appDataFolderRoot = appDataFolderRoot;
-            _moduleService = moduleService;
             _recipeHarvester = recipeHarvester;
             _recipeManager = recipeManager;
             _packagingSourceManager = packagingSourceManager;
