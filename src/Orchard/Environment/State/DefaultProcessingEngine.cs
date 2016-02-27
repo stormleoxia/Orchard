@@ -70,7 +70,7 @@ namespace Orchard.Environment.State {
             // Force reloading extensions if there were extensions installed
             // See http://orchard.codeplex.com/workitem/17465
             if (entry.MessageName == "IRecipeSchedulerEventHandler.ExecuteWork") {
-                var ctx = _orchardHost().GetShellContext(entry.ShellSettings);
+                _orchardHost().GetShellContext(entry.ShellSettings);
             }
 
             var shellContext = _shellContextFactory.CreateDescribedContext(entry.ShellSettings, entry.ShellDescriptor);
